@@ -13,8 +13,6 @@ using System.Net.Http.Headers;
 using System.Collections.Specialized;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
-
 
 namespace sharepoint_geocode_documents
 {
@@ -73,15 +71,18 @@ namespace sharepoint_geocode_documents
                 char[] period = {'.',' '};
                 char[] brackets={'{','}',' '};
                 char[] adv_char = {'A', 'D','V','a','d','v',' ' };
+                char[] har_char = {'H', 'A','R','H','A','R',' ' };
                 char[] pdf_char = {'P','D','F','p','d','f',' ' };
                 char[] lat = {'"','l','a','t',':',' ' };
                 
-                foreach (var item in items) {
+                foreach (var item in items) 
+                {
                     var name = item.Name.ToString();
 
                     // trim excess
                     string adv_trimmed = name.TrimStart(adv_char);
-                    string pdf_trimmed = adv_trimmed.TrimEnd(pdf_char);
+                    string har_trimmed = adv_trimmed.TrimStart(har_char);
+                    string pdf_trimmed = har_trimmed.TrimEnd(pdf_char);
 
                     // encode name, generate string, and set to variable {link}
                     var encodedName = System.Web.HttpUtility.UrlPathEncode(name);
@@ -120,61 +121,71 @@ namespace sharepoint_geocode_documents
                     client.DefaultRequestHeaders.Clear();
                     string address_geocoded = await client.GetStringAsync(geo_call);
 
-                    // take response, and set formatted address to variable {formatted_address}
-                    dynamic deseralize_4address = JsonConvert.DeserializeObject<dynamic>(address_geocoded)["results"][0];
-                    string formatted_address = deseralize_4address.formatted_address.ToString();
-
-                    // take response, format lat long to string, and set to variable {finalcoord}
-                    dynamic deseralize_4coords = JsonConvert.DeserializeObject<dynamic>(address_geocoded)["results"][0]["geometry"];
-                    string formatted_coords = deseralize_4coords.location.ToString();
-                    var formatted_coords_nobrackets = formatted_coords.TrimEnd(brackets);
-                    var formatted_coords_clean = formatted_coords_nobrackets.TrimStart(brackets);
-                    string formatted_coords_lat = formatted_coords_clean.Remove(0, formatted_coords_clean.IndexOf(' ') + 1);
-                    string formatted_coords_lat2 = formatted_coords_lat.TrimStart(lat);
-                    string longitude_dirty = formatted_coords_lat2.Split(' ').Last();
-                    string longitude = longitude_dirty.TrimEnd(whitespace);
-                    string latitude = formatted_coords_lat2.Split(' ').FirstOrDefault();
-                    var finalcoord =
-                        String.Format 
-                        ("({0} {1})",
-                        latitude, // 0
-                        longitude); // 1
-
-                    // post data to new sharepoint list
-                    // Console.WriteLine(link);
-                    // Console.WriteLine(finaldate.ToString(dateformat));
-                    // Console.WriteLine(formatted_address);
-                    // Console.WriteLine(finalcoord);
-                    var PUTsharepointUrl = "https://cityofpittsburgh.sharepoint.com/sites/PublicSafety/ACC/_api/web/lists/GetByTitle('GeocodedAdvises')/items";
-                    client.DefaultRequestHeaders.Clear();
-                    client.DefaultRequestHeaders.Authorization = 
-                    new AuthenticationHeaderValue ("Bearer", token);
-                    client.DefaultRequestHeaders.Add("Accept", "application/json;odata=verbose");
-                    client.DefaultRequestHeaders.Add("X-RequestDigest", "form digest value");
-                    client.DefaultRequestHeaders.Add("X-HTTP-Method", "POST");
-                    var dateformat = "MM/dd/yyyy HH:mm";
-                    var otherjson = 
-                        String.Format
-                        ("{{'__metadata': {{ 'type': 'SP.Data.GeocodedAdvisesListItem' }}, 'Geo' : '{0}', 'Date' : '{1}', 'link' : '{2}', 'address' : '{3}' }}",
-                            finalcoord, // 0
-                            finaldate.ToString(dateformat), // 1
-                            link, // 2
-                            formatted_address); // 3
-                            
-                    client.DefaultRequestHeaders.Add("ContentLength", otherjson.Length.ToString());
-                    try // post
+                    // check for geocoding success
+                    dynamic status_check = JObject.Parse(address_geocoded)["status"];
+                    if ( status_check == "OK")
                     {
-                        StringContent stuff = new StringContent(otherjson);               
-                        stuff.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json;odata=verbose");
-                        HttpResponseMessage otherstuff = client.PostAsync(PUTsharepointUrl, stuff).Result;
-                        otherstuff.EnsureSuccessStatusCode();
-                        var error = await otherstuff.Content.ReadAsStringAsync();
-                        Console.WriteLine(error);
+                        // take response, and set formatted address to variable {formatted_address}
+                        dynamic deseralize_4address = JsonConvert.DeserializeObject<dynamic>(address_geocoded)["results"][0];
+                        string formatted_address = deseralize_4address.formatted_address.ToString();
+
+                        // take response, format lat long to string, and set to variable {finalcoord}
+                        dynamic deseralize_4coords = JsonConvert.DeserializeObject<dynamic>(address_geocoded)["results"][0]["geometry"];
+                        string formatted_coords = deseralize_4coords.location.ToString();
+                        var formatted_coords_nobrackets = formatted_coords.TrimEnd(brackets);
+                        var formatted_coords_clean = formatted_coords_nobrackets.TrimStart(brackets);
+                        string formatted_coords_lat = formatted_coords_clean.Remove(0, formatted_coords_clean.IndexOf(' ') + 1);
+                        string formatted_coords_lat2 = formatted_coords_lat.TrimStart(lat);
+                        string longitude_dirty = formatted_coords_lat2.Split(' ').Last();
+                        string longitude = longitude_dirty.TrimEnd(whitespace);
+                        string latitude = formatted_coords_lat2.Split(' ').FirstOrDefault();
+                        var finalcoord =
+                            String.Format 
+                            ("({0} {1})",
+                            latitude, // 0
+                            longitude); // 1
+
+                        // post data to new sharepoint list
+                        // Console.WriteLine(link);
+                        // Console.WriteLine(finaldate.ToString(dateformat));
+                        // Console.WriteLine(formatted_address);
+                        // Console.WriteLine(finalcoord);
+                        var PUTsharepointUrl = "https://cityofpittsburgh.sharepoint.com/sites/PublicSafety/ACC/_api/web/lists/GetByTitle('GeocodedAdvises')/items";
+                        client.DefaultRequestHeaders.Clear();
+                        client.DefaultRequestHeaders.Authorization = 
+                        new AuthenticationHeaderValue ("Bearer", token);
+                        client.DefaultRequestHeaders.Add("Accept", "application/json;odata=verbose");
+                        client.DefaultRequestHeaders.Add("X-RequestDigest", "form digest value");
+                        client.DefaultRequestHeaders.Add("X-HTTP-Method", "POST");
+                        var dateformat = "MM/dd/yyyy HH:mm";
+                        var otherjson = 
+                            String.Format
+                            ("{{'__metadata': {{ 'type': 'SP.Data.GeocodedAdvisesListItem' }}, 'Geo' : '{0}', 'Date' : '{1}', 'link' : '{2}', 'address' : '{3}' }}",
+                                finalcoord, // 0
+                                finaldate.ToString(dateformat), // 1
+                                link, // 2
+                                formatted_address); // 3
+                                
+                        client.DefaultRequestHeaders.Add("ContentLength", otherjson.Length.ToString());
+                        try // post
+                        {
+                            StringContent stuff = new StringContent(otherjson);               
+                            stuff.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json;odata=verbose");
+                            HttpResponseMessage otherstuff = client.PostAsync(PUTsharepointUrl, stuff).Result;
+                            otherstuff.EnsureSuccessStatusCode();
+                            await otherstuff.Content.ReadAsStringAsync();
+                            Console.WriteLine("SUCCESS " + formatted_address);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine(ex.Message);
+                        }         
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        System.Diagnostics.Debug.WriteLine(ex.Message);
-                    }                   
+                        Console.WriteLine("ERROR " + address_encoded);
+                    }          
                 }
             }
             catch (Exception ex)
