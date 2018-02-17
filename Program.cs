@@ -69,14 +69,15 @@ namespace sharepoint_geocode_documents
                 string listitems = await client.GetStringAsync(sharepointUrl);
                 dynamic items = JObject.Parse(listitems)["value"];
 
+                char[] whitespace = {' ',' '};
+                char[] period = {'.',' '};
+                char[] brackets={'{','}',' '};
+                char[] adv_char = {'A', 'D','V','a','d','v',' ' };
+                char[] pdf_char = {'P','D','F','p','d','f',' ' };
+                char[] lat = {'"','l','a','t',':',' ' };
+                
                 foreach (var item in items) {
                     var name = item.Name.ToString();
-                    char[] whitespace = {' ',' '};
-                    char[] period = {'.',' '};
-                    char[] brackets={'{','}',' '};
-                    char[] adv_char = {'A', 'D','V','a','d','v',' ' };
-                    char[] pdf_char = {'P','D','F','p','d','f',' ' };
-                    char[] lat = {'"','l','a','t',':',' ' };
 
                     // trim excess
                     string adv_trimmed = name.TrimStart(adv_char);
