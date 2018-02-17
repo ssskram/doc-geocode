@@ -1,0 +1,10 @@
+/home/ssskram/console_functions/sharepoint-geocode-documents/bin/Debug/netcoreapp2.0/sharepoint-geocode-documents.deps.json
+/home/ssskram/console_functions/sharepoint-geocode-documents/bin/Debug/netcoreapp2.0/sharepoint-geocode-documents.runtimeconfig.json
+/home/ssskram/console_functions/sharepoint-geocode-documents/bin/Debug/netcoreapp2.0/sharepoint-geocode-documents.runtimeconfig.dev.json
+/home/ssskram/console_functions/sharepoint-geocode-documents/bin/Debug/netcoreapp2.0/sharepoint-geocode-documents.dll
+/home/ssskram/console_functions/sharepoint-geocode-documents/bin/Debug/netcoreapp2.0/sharepoint-geocode-documents.pdb
+/home/ssskram/console_functions/sharepoint-geocode-documents/obj/Debug/netcoreapp2.0/sharepoint-geocode-documents.csproj.CoreCompileInputs.cache
+/home/ssskram/console_functions/sharepoint-geocode-documents/obj/Debug/netcoreapp2.0/sharepoint-geocode-documents.AssemblyInfoInputs.cache
+/home/ssskram/console_functions/sharepoint-geocode-documents/obj/Debug/netcoreapp2.0/sharepoint-geocode-documents.AssemblyInfo.cs
+/home/ssskram/console_functions/sharepoint-geocode-documents/obj/Debug/netcoreapp2.0/sharepoint-geocode-documents.dll
+/home/ssskram/console_functions/sharepoint-geocode-documents/obj/Debug/netcoreapp2.0/sharepoint-geocode-documents.pdb
