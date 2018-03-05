@@ -74,6 +74,8 @@ namespace sharepoint_geocode_documents
                 char[] har_char = {'H', 'A','R','H','A','R',' ' };
                 char[] pdf_char = {'P','D','F','p','d','f',' ' };
                 char[] lat = {'"','l','a','t',':',' ' };
+
+                // add empty to variable to serve as counter
                 
                 foreach (var item in items) 
                 {
@@ -109,9 +111,32 @@ namespace sharepoint_geocode_documents
                         String.Format 
                         ("{0}, Pittsburgh PA",
                             address_trimmed); // 0
+                    string address_encoded = address_formatted.Replace(" ", "+");
+
+                    // if counter == even number or 0
+                    // {
+                    //      var key1 = "AIzaSyCnYm30pJ1b5oPdGPfm8xM-Xcgh20il32U";
+                    //      try {
+                    //          do function with api key 1
+                    //      }
+                    //      catch { 
+                    //          exception, and write address to csv
+                    //      }
+                    // }
+                    // else
+                    // {
+                    //      var key2 = "AIzaSyAVJAJTL5EBQ6d4ePiGgWKgQSiDJEyLa8s";
+                    //      try {
+                    //          do function with api key 2
+                    //      }
+                    //      catch { 
+                    //          exception, and write address to csv
+                    //      }
+                    // }
+                    // then add 1 to counter
 
                     // ...async call to geocode function, set response to {address_geocoded}...
-                    string address_encoded = address_formatted.Replace(" ", "+");
+
                     var key = "AIzaSyAGMvXsKuegbele6gX5Mx8P2FeENjZriKg";
                     var geo_call =
                         String.Format 
@@ -146,10 +171,6 @@ namespace sharepoint_geocode_documents
                             longitude); // 1
 
                         // post data to new sharepoint list
-                        // Console.WriteLine(link);
-                        // Console.WriteLine(finaldate.ToString(dateformat));
-                        // Console.WriteLine(formatted_address);
-                        // Console.WriteLine(finalcoord);
                         var PUTsharepointUrl = "https://cityofpittsburgh.sharepoint.com/sites/PublicSafety/ACC/_api/web/lists/GetByTitle('GeocodedAdvises')/items";
                         client.DefaultRequestHeaders.Clear();
                         client.DefaultRequestHeaders.Authorization = 
