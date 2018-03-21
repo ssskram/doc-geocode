@@ -157,6 +157,7 @@ namespace sharepoint_geocode_documents
                         else
                         {
                             sw.WriteLine(item.Name);
+                            Console.WriteLine(item.Name);
                         }  
                     }
                     catch (Exception e)
@@ -229,6 +230,7 @@ namespace sharepoint_geocode_documents
                         else
                         {
                             sw.WriteLine(item.Name);
+                            Console.WriteLine(item.Name);
                         }  
                     }
                     catch (Exception e)
