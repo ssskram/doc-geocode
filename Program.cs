@@ -32,7 +32,7 @@ namespace sharepoint_geocode_documents
             await refreshtoken();
             var token = refreshtoken().Result;
             // get list items
-            var sharepointUrl = "https://cityofpittsburgh.sharepoint.com/sites/PublicSafety/ACC/_api/web/GetFolderByServerRelativeUrl('ScannedAdvises')/Files";
+            var sharepointUrl = "https://cityofpittsburgh.sharepoint.com/sites/PublicSafety/ACC/_api/web/GetFolderByServerRelativeUrl('Relay')/Files";
             client1.DefaultRequestHeaders.Clear();
             client1.DefaultRequestHeaders.Add("Accept", "application/json");
             client1.DefaultRequestHeaders.Authorization = 
