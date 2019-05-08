@@ -96,7 +96,7 @@ namespace sharepoint_geocode_documents
                 {
                     try
                     {
-                        var key1 = "AIzaSyA8hIHTerE_b51886Q761BNQ53sQUsI97E";
+                        var key1 = "<first google api key>";
                         var geo_call =
                             String.Format 
                             ("https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}",
@@ -169,7 +169,7 @@ namespace sharepoint_geocode_documents
                 {
                     try
                     {
-                        var key2 = "AIzaSyCa9Y6Y4SweqQd2qJU6KtTSA1dgiaZHp4k";
+                        var key2 = "<second google api key>";
                         var geo_call =
                             String.Format 
                             ("https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}",
@@ -246,11 +246,11 @@ namespace sharepoint_geocode_documents
             public async Task<String> refreshtoken()
             {
                 var MSurl = "https://accounts.accesscontrol.windows.net/f5f47917-c904-4368-9120-d327cf175591/tokens/OAuth/2";
-                var clientid = "c0740d7b-dba6-425e-914f-859063d838fc%40f5f47917-c904-4368-9120-d327cf175591";
-                var clientsecret = "kVcPCXVr50mTgObLxhgkV5d9b6CnYzFYlsxc9tdMN0w=";
-                var refreshtoken = "IAAAAMsl76XQ7zdMfN0R192Cm7w5cUd7vOtIribo7QiEdX87oVoPrl-OnkLHgkXZuEHbkavAhUE2pcZaQBOCyyaaRGjyc7ZaXM0lFwfwSWNM3HFCFp7EBdmgHGW2HXIDS9xPuoUAZ-MKHuu63i430NitMzMdJvblsNhVkyu9IwwMjappKhPkebZBdNsypMnT8oncZiNfCSBit3YXug_bTH8qFC8Zjsd9pZKfeywrIcPfjAa1hIsZqgDzKJEiFL3HTqvbYwvglDjtAdUVK4sk7HO56LNmmmooiCHqMghNT8g_hWipNK06Y9sZewSRgy_KizidrSILXYfSdrI0gSBy_g_d340";
+                var clientid = "<client id>";
+                var clientsecret = "<client secret>";
+                var refreshtoken = "<refresh token>";
                 var redirecturi = "https%3A%2F%2Flocalhost%2F";
-                var SPresource = "00000003-0000-0ff1-ce00-000000000000%2Fcityofpittsburgh.sharepoint.com%40f5f47917-c904-4368-9120-d327cf175591";
+                var SPresource = "<resource id>";
                 client1.DefaultRequestHeaders.Clear();
                 client1.DefaultRequestHeaders.Add("Accept", "application/x-www-form-urlencoded");
                 client1.DefaultRequestHeaders.Add("X-HTTP-Method", "POST");
